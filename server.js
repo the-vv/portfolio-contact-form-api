@@ -76,17 +76,6 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-console.log({
-  service: process.env.EMAIL_SERVICE,
-  port: 587,
-  secure: false,
-  debug: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-})
-
 // Authentication middleware
 function isAuthenticated(req, res, next) {
   if (req.session.isAuthenticated) {
