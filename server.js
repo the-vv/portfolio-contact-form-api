@@ -11,7 +11,7 @@ import { fileURLToPath } from "url"
 try {
   process.loadEnvFile()
 } catch (error) {
-  console.error("Error loading .env file:", error)
+  console.log('Env file not found')
 }
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -47,7 +47,7 @@ app.set("views", path.join(__dirname, "views"))
 let db
 async function setupDatabase() {
   db = await open({
-    filename: "./database.sqlite",
+    filename: "./database/database.sqlite",
     driver: sqlite3.Database,
   })
 
