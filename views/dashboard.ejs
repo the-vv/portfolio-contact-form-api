@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Submissions Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e1e4e8;
+    }
+    
+    h1 {
+      color: #2c3e50;
+      margin: 0;
+    }
+    
+    .user-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .username {
+      font-weight: 600;
+    }
+    
+    .logout-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    
+    .logout-btn:hover {
+      background-color: #c0392b;
+    }
+    
+    .submissions-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    .no-submissions {
+      padding: 30px;
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 18px;
+    }
+    
+    .submission {
+      padding: 20px;
+      border-bottom: 1px solid #e1e4e8;
+      transition: background-color 0.2s;
+    }
+    
+    .submission:last-child {
+      border-bottom: none;
+    }
+    
+    .submission:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .submission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .submission-name {
+      font-weight: 600;
+      font-size: 18px;
+      color: #2c3e50;
+    }
+    
+    .submission-date {
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+    
+    .submission-email {
+      color: #3498db;
+      margin-bottom: 10px;
+    }
+    
+    .submission-subject {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .submission-message {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      white-space: pre-wrap;
+    }
+    
+    .delete-form {
+      text-align: right;
+    }
+    
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+  <script>
+    function confirmDelete() {
+      return confirm('Are you sure you want to delete this submission?');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Contact Submissions Dashboard</h1>
+      <div class="user-controls">
+        <span class="username">Logged in as: <%= username %></span>
+        <a href="/logout" class="logout-btn">Logout</a>
+      </div>
+    </header>
+    
+    <div class="submissions-container">
+      <% if (submissions.length === 0) { %>
+        <div class="no-submissions">
+          No submissions yet.
+        </div>
+      <% } else { %>
+        <% submissions.forEach(submission => { %>
+          <div class="submission">
+            <div class="submission-header">
+              <div class="submission-name"><%= submission.name %></div>
+              <div class="submission-date"><%= new Date(submission.created_at + 'Z').toLocaleString() %></div>
+            </div>
+            <div class="submission-email"><%= submission.email %></div>
+            <% if (submission.subject) { %>
+              <div class="submission-subject">Subject: <%= submission.subject %></div>
+            <% } %>
+            <div class="submission-message"><%= submission.message %></div>
+            <form class="delete-form" action="/delete/<%= submission.id %>" method="POST" onsubmit="return confirmDelete()">
+              <button type="submit" class="delete-btn">Delete</button>
+            </form>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
+
