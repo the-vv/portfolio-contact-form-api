@@ -8,7 +8,11 @@ import bcrypt from "bcrypt"
 import path from "path"
 import { fileURLToPath } from "url"
 
-process.loadEnvFile()
+try {
+  process.loadEnvFile()
+} catch (error) {
+  console.error("Error loading .env file:", error)
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
