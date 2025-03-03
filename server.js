@@ -20,6 +20,13 @@ const app = express()
 const PORT = process.env.PORT || 3000
 
 // Middleware
+app.use((req, res, next) => {
+  // set cors for thevv.me
+  res.setHeader("Access-Control-Allow-Origin", process.env.DEV === 'DEV' ? "http://127.0.0.1:5500" : "https://thevv.me")
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+  next()
+})
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, "public")))
@@ -96,7 +103,7 @@ app.get("/", (req, res) => {
 // Contact form submission
 app.post("/submit", async (req, res) => {
   try {
-    const { name, email, subject, message } = req.body
+    const { name, email, message } = req.body
 
     // Validate input
     if (!name || !email || !message) {
@@ -114,7 +121,7 @@ app.post("/submit", async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_FROM,
       to: process.env.EMAIL_TO,
-      subject: `New Contact Form Submission: ${subject || "No Subject"}`,
+      subject: `New Contact Form Submission`,
       text: `
         Name: ${name}
         Email: ${email}
